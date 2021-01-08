@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        #allmap {
+            width: 100%;
+            height: 100%
+        }
+
+        p {
+            margin-left: 5px;
+            font-size: 14px;
+        }
+        .listContent{
+            width: 200px;
+            height: 300px;
+            background: #ffffff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+        .listContent div{
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: center
+        }
+    </style>
+    <script src="./index.js">
+    </script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.3&services=true"></script>
+    <title>圆形区域</title>
+</head>
+
+<body>
+    <div id="allmap"></div>
+    <div class="listContent"></div>
+</body>
+
+</html>
+<script type="text/javascript">
+    // 百度地图API功能
+    var points = [{
+        "lng": 116.316967,
+        "lat": 39.990748,
+        'name':'圆1'
+
+    }, {
+        "lng": 116.323938,
+        "lat": 39.989919,
+        'name': '圆1'
+    }, {
+        "lng": 116.328896,
+        "lat": 39.988039,
+        'name': '圆3'
+    }, {
+        "lng": 116.321135,
+        "lat": 39.987072,
+        'name': '圆4'
+    }, {
+        "lng": 116.332453,
+        "lat": 39.989007,
+        'name': '圆5'
+
+    }, {
+        "lng": 116.324045,
+        "lat": 39.987984,
+        'name': '圆6'
+    }];
+    var str = ''
+    points.forEach(function(item,index){
+        str += '<div lng="'+ item.lng +'" lat="'+ item.lat +'">'+ item.name +'</div>'
+    })
+    $(".listContent").html('');
+    $(".listContent").html(str);
+    $(".listContent").find('div').click(function(){
+        map.clearOverlays()
+        addMarker(points)
+        var circle = new BMap.Circle(new BMap.Point($(this).attr('lng'), $(this).attr('lat')), 300, { fillColor: "red", strokeWeight: 2, fillOpacity: 0.3, strokeOpacity: 0.3 });
+        map.addOverlay(circle);
+    })
+   
+    var map = new BMap.Map("allmap"); // 创建Map实例
+    map.enableScrollWheelZoom();
+    map.centerAndZoom(new BMap.Point(116.316967, 39.990748), 15);
+    
+    addMarker(points)
+    function addMarker(points) {
+        var point;
+        for (var i = 0, pointsLen = points.length; i < pointsLen; i++) {
+            point = new BMap.Point(points[i].lng, points[i].lat);
+            console.log(point)
+            // , enableEditing: true
+            var circle = new BMap.Circle(point, 300, { fillColor: "blue", strokeWeight: 1, fillOpacity: 0.3, strokeOpacity: 0.3});
+            map.addOverlay(circle);
+        }
+    };
+</script>
